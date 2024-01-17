@@ -2,6 +2,7 @@ from datasets import load_dataset
 
 from src.constraint_extractor import ConstraintExtractor
 from src.solution_generator import SolutionGenerator
+from stc.baseline import RuleBasedBaseline
 
 def main():
     # Sample code snippet for which we want to generate completions
@@ -31,6 +32,11 @@ def calculate_sum(a, b):
     context = ("def", "calculate_sum(a,")  
     next_token = solution_generator.generate_solution(context)
     print("Suggested Completion:", next_token)
+    
+    rule_based_baseline = RuleBasedBaseline()
+    last_line = code_snippet.strip().split('\n')[-1]
+    baseline_solution = rule_based_baseline.generate_suggestion(last_line)
+    print("Rule-Based Baseline Suggestion:", baseline_solution)
 
 if __name__ == "__main__":
     main()
