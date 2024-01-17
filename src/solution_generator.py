@@ -8,12 +8,22 @@ class SolutionGenerator:
     def __init__(self, ngram_model):
         self.ngram_model = ngram_model
 
-    def generate_solution(self, context):
-        if context not in self.ngram_model:
-            return None  # No suggestions available for this context
+    def generate_solution(self, constraints):
+        if 'functions' in constraints and constraints['functions']:
+            last_function = constraints['functions'][-1]
+            func_name = last_function['name']
+            context = (func_name, ) 
+        elif 'variables' in constraints and constraints['variables']:
+            context = variables[-1]
+        elif 'classes' in constraints and constraints['classes']:
+            context = constraints['classes'][-1]
+        elif 'imports' in constraints and constraints['imports']:
+            context = constraints['imports'][-1]
+        
+        if context in self.ngram_model:
+            return max(self.ngram_model[context], key=self.ngram_model[context].get)
 
-        possible_tokens = self.ngram_model[context]
-        return max(possible_tokens, key=possible_tokens.get)  # Return the most likely token
+        return None
 
     @staticmethod
     def train_ngram_model(dataset, n=3):
