@@ -9,12 +9,6 @@ class ConstraintExtractor:
         self.variables = []
 
     def extract_constraints(self):
-        """
-        Extracts constraints from the Python code snippet.
-
-        Returns:
-            dict: A dictionary containing extracted constraints.
-        """
         try:
             # Parse the code snippet into an AST
             parsed_code = ast.parse(self.code_snippet)
