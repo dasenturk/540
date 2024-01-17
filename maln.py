@@ -1,4 +1,4 @@
-
+from datasets import load_dataset
 
 from src.constraint_extractor import ConstraintExtractor
 from src.solution_generator import SolutionGenerator
@@ -17,18 +17,18 @@ def calculate_sum(a, b):
     constraints = constraint_extractor.extract_constraints()
     print("Extracted Constraints:", constraints)
 
-    # Sample dataset for training the n-gram model (in real scenario, load a large dataset)
-    example_dataset = ["def calculate_sum(a, b):", "return a + b"]
+    
+    train_dataset = load_dataset ("AhmedSSoliman/CodeSearchNet", split='train')
+    test_dataset = load_dataset ("AhmedSSoliman/CodeSearchNet", split='test')
 
     # Train the n-gram model
-    ngram_model = SolutionGenerator.train_ngram_model(example_dataset)
+    ngram_model = SolutionGenerator.train_ngram_model(train_dataset)
 
     # Initialize the SolutionGenerator with the trained model
     solution_generator = SolutionGenerator(ngram_model)
 
     # Generate a solution based on a context
-    # For demonstration, let's assume we want to complete after "def calculate_sum(a,"
-    context = ("def", "calculate_sum(a,")  # This context would be dynamically derived from the code in real scenarios
+    context = ("def", "calculate_sum(a,")  
     next_token = solution_generator.generate_solution(context)
     print("Suggested Completion:", next_token)
 
