@@ -1,20 +1,36 @@
+
+
 from src.constraint_extractor import ConstraintExtractor
 from src.solution_generator import SolutionGenerator
-from src.evaluation import Evaluation
 
 def main():
-    code_snippet = "your_code_snippet_here"
+    # Sample code snippet for which we want to generate completions
+    code_snippet = """
+def calculate_sum(a, b):
+    return a + b
+"""
 
-    extractor = ConstraintExtractor()
-    generator = SolutionGenerator(dataset)
+    # Initialize the ConstraintExtractor
+    constraint_extractor = ConstraintExtractor(code_snippet)
 
-    evaluator = Evaluation()
+    # Extract constraints from the code snippet
+    constraints = constraint_extractor.extract_constraints()
+    print("Extracted Constraints:", constraints)
 
-    constraints = extractor.extract(code_snippet)
-    solutions = generator.generate(constraints)
-    ranked_solutions = evaluator.evaluate(solutions)
+    # Sample dataset for training the n-gram model (in real scenario, load a large dataset)
+    example_dataset = ["def calculate_sum(a, b):", "return a + b"]
 
-    print("Top solution:", ranked_solutions[0] if ranked_solutions else "No solution found")
+    # Train the n-gram model
+    ngram_model = SolutionGenerator.train_ngram_model(example_dataset)
+
+    # Initialize the SolutionGenerator with the trained model
+    solution_generator = SolutionGenerator(ngram_model)
+
+    # Generate a solution based on a context
+    # For demonstration, let's assume we want to complete after "def calculate_sum(a,"
+    context = ("def", "calculate_sum(a,")  # This context would be dynamically derived from the code in real scenarios
+    next_token = solution_generator.generate_solution(context)
+    print("Suggested Completion:", next_token)
 
 if __name__ == "__main__":
     main()
