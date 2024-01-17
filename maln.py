@@ -2,7 +2,7 @@ from datasets import load_dataset
 
 from src.constraint_extractor import ConstraintExtractor
 from src.solution_generator import SolutionGenerator
-from stc.baseline import RuleBasedBaseline
+from src.baseline import RuleBasedBaseline
 from src.evaluation import Evaluation
 
 def main():
@@ -20,8 +20,8 @@ def calculate_sum(a, b):
     print("Extracted Constraints:", constraints)
 
     
-    train_dataset = load_dataset ("AhmedSSoliman/CodeSearchNet", split='train')
-    test_dataset = load_dataset ("AhmedSSoliman/CodeSearchNet", split='test')
+    train_dataset = load_dataset("AhmedSSoliman/CodeSearchNet", split='train')
+    test_dataset = load_dataset("AhmedSSoliman/CodeSearchNet", split='test')
 
     # Train the n-gram model
     ngram_model = SolutionGenerator.train_ngram_model(train_dataset)
@@ -30,8 +30,7 @@ def calculate_sum(a, b):
     solution_generator = SolutionGenerator(ngram_model)
 
     # Generate a solution based on a context
-    context = ("def", "calculate_sum(a,")  
-    next_token = solution_generator.generate_solution(context)
+    next_token = solution_generator.generate_solution(constraints)
     print("Suggested Completion:", next_token)
     
     rule_based_baseline = RuleBasedBaseline()
